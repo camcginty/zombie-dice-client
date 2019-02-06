@@ -3,6 +3,8 @@
 // 4 yellow dice with 2 brains, 2 shots, 2 feet
 // 3 red dice with 1 brain, 3 shots, 2 feet
 
+const can = []
+
 const dieOne = {
   color: 'green',
   sides: ['brain', 'brain', 'brain', 'feet', 'feet', 'shot'],
@@ -105,4 +107,25 @@ const dieThirteen = {
   roll: function () {
     return this.sides[(Math.random() * this.sides.length) | 0]
   }
+}
+
+const startGame = function () {
+  can.push(dieOne)
+  can.push(dieTwo)
+  can.push(dieThree)
+  can.push(dieFour)
+  can.push(dieFive)
+  can.push(dieSix)
+  can.push(dieSeven)
+  can.push(dieEight)
+  can.push(dieNine)
+  can.push(dieTen)
+  can.push(dieEleven)
+  can.push(dieTwelve)
+  can.push(dieThirteen)
+  console.log(can)
+}
+
+module.exports = {
+  startGame
 }

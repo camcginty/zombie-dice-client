@@ -135,9 +135,12 @@ let dieNumber
 
 // take 3 random dice out of the can and put them into the player's hand
 const takeDice = function () {
+  // pick a random die
   dieNumber = [Math.floor(Math.random() * can.length)]
   console.log(dieNumber)
+  // add the die to playerHand
   playerHand.push(can[dieNumber])
+  // remove the die from can
   can.splice(dieNumber, 1)
   console.log(can)
   console.log(playerHand)
@@ -161,7 +164,9 @@ let shots = 0
 
 // roll the 3 dice in player's hand
 const rollDice = function () {
+  // pull 3 dice from the can
   takeDice()
+  // roll the first die and increase the value of the thing you rolled
   playerHand[0].roll()
   if (playerHand[0].roll() === 'brain') {
     brains += 1
@@ -174,6 +179,7 @@ const rollDice = function () {
     document.getElementById('feet').value = feet
   }
   console.log(brains, shots, feet)
+  // roll the second die and increase the value of the thing you rolled
   playerHand[1].roll()
   if (playerHand[1].roll() === 'brain') {
     brains += 1
@@ -186,6 +192,7 @@ const rollDice = function () {
     document.getElementById('feet').value = feet
   }
   console.log(brains, shots, feet)
+  // roll the third die and increase the value of the thing you rolled
   playerHand[2].roll()
   if (playerHand[2].roll() === 'brain') {
     brains += 1
@@ -201,7 +208,10 @@ const rollDice = function () {
 }
 
 const rollAgain = function () {
-  // do things
+  // save nrains and shots this round, reset feet
+  // keep feet dice in hand, discard others
+  // draw back up to 3 dice from can
+  rollDice()
 }
 
 module.exports = {

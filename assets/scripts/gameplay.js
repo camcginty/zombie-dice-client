@@ -113,8 +113,11 @@ const dieThirteen = {
   }
 }
 
-// on gamestart, put the 13 dice in the can
+// on gamestart, make sure can and playerHand are empty
+// put the 13 dice in the can
 const startGame = function () {
+  playerHand.length = 0
+  can.length = 0
   can.push(dieOne)
   can.push(dieTwo)
   can.push(dieThree)
@@ -144,18 +147,6 @@ const takeDice = function () {
   can.splice(dieNumber, 1)
   console.log(can)
   console.log(playerHand)
-
-  dieNumber = [Math.floor(Math.random() * can.length)]
-  playerHand.push(can[dieNumber])
-  can.splice(dieNumber, 1)
-  console.log(can)
-  console.log(playerHand)
-
-  dieNumber = [Math.floor(Math.random() * can.length)]
-  playerHand.push(can[dieNumber])
-  can.splice(dieNumber, 1)
-  console.log(can)
-  console.log(playerHand)
 }
 
 let brains = 0
@@ -165,53 +156,78 @@ let shots = 0
 // roll the 3 dice in player's hand
 const rollDice = function () {
   // pull 3 dice from the can
-  takeDice()
+  do {
+    takeDice()
+  } while (playerHand.length < 3)
   // roll the first die and increase the value of the thing you rolled
-  playerHand[0].roll()
-  if (playerHand[0].roll() === 'brain') {
+  playerHand[2].roll()
+  if (playerHand[2].roll() === 'brain') {
     brains += 1
     document.getElementById('brains').value = brains
-  } else if (playerHand[0].roll() === 'shot') {
+    playerHand.pop()
+  } else if (playerHand[2].roll() === 'shot') {
     shots += 1
     document.getElementById('shots').value = shots
+    playerHand.pop()
   } else {
     feet += 1
     document.getElementById('feet').value = feet
   }
   console.log(brains, shots, feet)
+  console.log(playerHand)
   // roll the second die and increase the value of the thing you rolled
   playerHand[1].roll()
   if (playerHand[1].roll() === 'brain') {
     brains += 1
     document.getElementById('brains').value = brains
+    playerHand.splice(1, 1)
   } else if (playerHand[1].roll() === 'shot') {
     shots += 1
     document.getElementById('shots').value = shots
+    playerHand.splice(1, 1)
   } else {
     feet += 1
     document.getElementById('feet').value = feet
   }
   console.log(brains, shots, feet)
+  console.log(playerHand)
   // roll the third die and increase the value of the thing you rolled
-  playerHand[2].roll()
-  if (playerHand[2].roll() === 'brain') {
+  playerHand[0].roll()
+  if (playerHand[0].roll() === 'brain') {
     brains += 1
     document.getElementById('brains').value = brains
-  } else if (playerHand[2].roll() === 'shot') {
+    playerHand.splice(0, 1)
+  } else if (playerHand[0].roll() === 'shot') {
     shots += 1
     document.getElementById('shots').value = shots
+    playerHand.splice(0, 1)
   } else {
     feet += 1
     document.getElementById('feet').value = feet
   }
   console.log(brains, shots, feet)
+  console.log(playerHand)
+  checkWinLose()
+}
+
+const resetFeet = function () {
+  feet = 0
+  document.getElementById('feet').value = feet
 }
 
 const rollAgain = function () {
-  // save nrains and shots this round, reset feet
-  // keep feet dice in hand, discard others
-  // draw back up to 3 dice from can
-  rollDice()
+  if (brains > 0 | shots > 0 | feet > 0) {
+    resetFeet()
+    rollDice()
+  }
+}
+
+const checkWinLose = function () {
+  if (brains >= 13) {
+    alert('you ate so many brains! you win!')
+  } else if (shots >= 3) {
+    alert('shotgunned! you lose all your brains this turn')
+  }
 }
 
 module.exports = {

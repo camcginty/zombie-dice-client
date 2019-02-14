@@ -11,4 +11,5 @@ $(() => {
   // your JS code goes here
   $('.start').on('click', gameplay.startGame)
   $('.roll').on('click', gameplay.rollDice)
+  $('.rollAgain').on('click', gameplay.rollAgain)
 })

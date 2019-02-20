@@ -1,3 +1,5 @@
+'use strict'
+const store = require('./store.js')
 
 // can is empty until startGame
 const can = []
@@ -136,6 +138,14 @@ const startGame = function () {
 
 let dieNumber
 
+// checks if you've rolled already this turn
+// starts rollDice function if it's your first roll of the turn
+const startTurn = function () {
+  if (brains === 0 && shots === 0 && feet === 0) {
+    rollDice()
+  }
+}
+
 // take 3 random dice out of the can and put them into the player's hand
 const takeDice = function () {
   // pick a random die
@@ -173,8 +183,6 @@ const rollDice = function () {
     feet += 1
     document.getElementById('feet').value = feet
   }
-  console.log(brains, shots, feet)
-  console.log(playerHand)
   // roll the second die and increase the value of the thing you rolled
   playerHand[1].roll()
   if (playerHand[1].roll() === 'brain') {
@@ -210,18 +218,24 @@ const rollDice = function () {
   checkWinLose()
 }
 
+// feet counter goes back to zero
 const resetFeet = function () {
   feet = 0
   document.getElementById('feet').value = feet
 }
 
+// can only roll again if you've already rolled
 const rollAgain = function () {
   if (brains > 0 | shots > 0 | feet > 0) {
+    // feet counter goes back to zero
     resetFeet()
     rollDice()
   }
 }
 
+// check win/loss conditions
+// eating 13 brains wins the game
+// getting 3 shots in a turn ends your turn and forfeits your brains for the turn
 const checkWinLose = function () {
   if (brains >= 13) {
     alert('you ate so many brains! you win!')
@@ -230,8 +244,35 @@ const checkWinLose = function () {
   }
 }
 
+const resetCounters = function () {
+  brains = 0
+  document.getElementById('brains').value = brains
+  shots = 0
+  document.getElementById('shots').value = shots
+  feet = 0
+  document.getElementById('feet').value = feet
+}
+
+store.playerOneBrains = 0
+
+// add brains collected this turn to player's total brains this game
+const storeBrains = function () {
+  store.playerOneBrains += brains
+  console.log(store.playerOneBrains)
+}
+
+const endTurn = function () {
+  // save brains, add to player's total brains
+  storeBrains()
+  // reset current brain/feet/shots counters
+  resetCounters()
+  // swap to other player's turn
+  // coming soon
+}
+
 module.exports = {
   startGame,
-  rollDice,
-  rollAgain
+  startTurn,
+  rollAgain,
+  endTurn
 }

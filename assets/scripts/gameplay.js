@@ -1,7 +1,9 @@
 'use strict'
 const store = require('./store.js')
 
-// can is empty until startGame
+let playerOneTurn = false
+
+// can is empty until fillCan
 const can = []
 
 // playerHand is empty until takeDice
@@ -115,10 +117,19 @@ const dieThirteen = {
   }
 }
 
-// on gamestart, make sure can and playerHand are empty
-// put the 13 dice in the can
+// on gamestart, make sure playerHand is empty
+// make it playerOne's turn
 const startGame = function () {
   playerHand.length = 0
+  playerOneTurn = !playerOneTurn
+  console.log(playerOneTurn)
+  fillCan()
+}
+
+// make sure can is empty
+// then put the 13 dice in the can
+const fillCan = function () {
+  console.log(playerOneTurn)
   can.length = 0
   can.push(dieOne)
   can.push(dieTwo)
@@ -148,15 +159,13 @@ const startTurn = function () {
 
 // take 3 random dice out of the can and put them into the player's hand
 const takeDice = function () {
+  console.log(playerOneTurn)
   // pick a random die
   dieNumber = [Math.floor(Math.random() * can.length)]
-  console.log(dieNumber)
   // add the die to playerHand
   playerHand.push(can[dieNumber])
   // remove the die from can
   can.splice(dieNumber, 1)
-  console.log(can)
-  console.log(playerHand)
 }
 
 let brains = 0
@@ -165,6 +174,7 @@ let shots = 0
 
 // roll the 3 dice in player's hand
 const rollDice = function () {
+  console.log(playerOneTurn)
   // pull 3 dice from the can
   do {
     takeDice()
@@ -197,8 +207,6 @@ const rollDice = function () {
     feet += 1
     document.getElementById('feet').value = feet
   }
-  console.log(brains, shots, feet)
-  console.log(playerHand)
   // roll the third die and increase the value of the thing you rolled
   playerHand[0].roll()
   if (playerHand[0].roll() === 'brain') {
@@ -226,6 +234,7 @@ const resetFeet = function () {
 
 // can only roll again if you've already rolled
 const rollAgain = function () {
+  console.log(playerOneTurn)
   if (brains > 0 | shots > 0 | feet > 0) {
     // feet counter goes back to zero
     resetFeet()
@@ -237,10 +246,13 @@ const rollAgain = function () {
 // eating 13 brains wins the game
 // getting 3 shots in a turn ends your turn and forfeits your brains for the turn
 const checkWinLose = function () {
-  if (brains >= 13) {
+  console.log(playerOneTurn)
+  if (store.playerOneBrains >= 13 || store.playerTwoBrains >= 13) {
     alert('you ate so many brains! you win!')
-  } else if (shots >= 3) {
+    gameOver()
+  } else if (document.getElementById('shots').value >= 3) {
     alert('shotgunned! you lose all your brains this turn')
+    loseTurn()
   }
 }
 
@@ -254,11 +266,28 @@ const resetCounters = function () {
 }
 
 store.playerOneBrains = 0
+store.playerTwoBrains = 0
 
 // add brains collected this turn to player's total brains this game
 const storeBrains = function () {
-  store.playerOneBrains += brains
-  console.log(store.playerOneBrains)
+  console.log(playerOneTurn)
+  if (playerOneTurn === true) {
+    store.playerOneBrains += brains
+  } else if (playerOneTurn === false) {
+    store.playerTwoBrains += brains
+  } else {
+    console.log('error')
+    console.log(playerOneTurn)
+    console.log(store)
+  }
+  console.log(store)
+  checkWinLose()
+}
+
+const loseTurn = function () {
+  resetCounters()
+  fillCan()
+  playerOneTurn = !playerOneTurn
 }
 
 const endTurn = function () {
@@ -266,8 +295,16 @@ const endTurn = function () {
   storeBrains()
   // reset current brain/feet/shots counters
   resetCounters()
+  // change player
+  playerOneTurn = !playerOneTurn
+  // put all dice back in cup
+  fillCan()
   // swap to other player's turn
   // coming soon
+}
+
+const gameOver = function () {
+  // can't press any buttons except start game
 }
 
 module.exports = {

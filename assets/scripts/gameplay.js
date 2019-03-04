@@ -118,15 +118,22 @@ const dieThirteen = {
     return (this.sides[(Math.random() * this.sides.length) | 0])
   }
 }
+
 // on gamestart, make sure playerHand is empty
 // make it playerOne's turn
 const startGame = function () {
-  $('.notPlaying').hide()
-  $('.firstRoll').show()
-  $('.afterFirstRoll').hide()
+  display.startGameDisplay()
   playerHand.length = 0
   playerOneTurn = !playerOneTurn
+  display.showPlayer(playerOneTurn)
   console.log(playerOneTurn)
+  fillCan()
+}
+
+const changeTurn = function () {
+  display.startTurnDisplay()
+  display.showPlayer()
+  playerHand.length = 0
   fillCan()
 }
 
@@ -180,8 +187,7 @@ let shots = 0
 
 // roll the 3 dice in player's hand
 const rollDice = function () {
-  $('.firstRoll').hide()
-  $('.afterFirstRoll').show()
+  display.afterInitialRoll()
   // pull 3 dice from the can
   do {
     takeDice()
@@ -266,12 +272,13 @@ const rollAgain = function () {
 // getting 3 shots in a turn ends your turn and forfeits your brains for the turn
 const checkWinLose = function () {
   if (store.playerOneBrains >= 13 || store.playerTwoBrains >= 13) {
-  if (brains >= 13) {
-    alert('you ate so many brains! you win!')
-    gameOver()
-  } else if (shots >= 3) {
-    alert('shotgunned! you lose all your brains this turn')
-    loseTurn()
+    if (brains >= 13) {
+      alert('you ate so many brains! you win!')
+      gameOver()
+    } else if (shots >= 3) {
+      alert('shotgunned! you lose all your brains this turn')
+      loseTurn()
+    }
   }
 }
 
@@ -316,14 +323,14 @@ const endTurn = function () {
   resetCounters()
   // change player
   playerOneTurn = !playerOneTurn
-  // put all dice back in cup
-  fillCan()
   // swap to other player's turn
-  // coming soon
+  changeTurn()
 }
 
+// change display
+// anything else need to be done here?
 const gameOver = function () {
-  // can't press any buttons except start game
+  display.endedGameDisplay()
 }
 
 module.exports = {

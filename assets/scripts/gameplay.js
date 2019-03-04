@@ -1,5 +1,11 @@
+'use strict'
+
 const display = require('./display.js')
-// can is empty until startGame
+const store = require('./store.js')
+
+let playerOneTurn = false
+
+// can is empty until fillCan
 const can = []
 
 // playerHand is empty until takeDice
@@ -112,14 +118,22 @@ const dieThirteen = {
     return (this.sides[(Math.random() * this.sides.length) | 0])
   }
 }
-
-// on gamestart, make sure can and playerHand are empty
-// put the 13 dice in the can
+// on gamestart, make sure playerHand is empty
+// make it playerOne's turn
 const startGame = function () {
   $('.notPlaying').hide()
   $('.firstRoll').show()
   $('.afterFirstRoll').hide()
   playerHand.length = 0
+  playerOneTurn = !playerOneTurn
+  console.log(playerOneTurn)
+  fillCan()
+}
+
+// make sure can is empty
+// then put the 13 dice in the can
+const fillCan = function () {
+  console.log(playerOneTurn)
   can.length = 0
   can.push(dieOne)
   can.push(dieTwo)
@@ -138,6 +152,14 @@ const startGame = function () {
 }
 
 let dieNumber
+
+// checks if you've rolled already this turn
+// starts rollDice function if it's your first roll of the turn
+const startTurn = function () {
+  if (brains === 0 && shots === 0 && feet === 0) {
+    rollDice()
+  }
+}
 
 // take 3 random dice out of the can and put them into the player's hand
 const takeDice = function () {
@@ -224,28 +246,90 @@ const rollDice = function () {
   checkWinLose()
 }
 
+// feet counter goes back to zero
 const resetFeet = function () {
   feet = 0
   document.getElementById('feet').value = feet
 }
 
+// can only roll again if you've already rolled
 const rollAgain = function () {
   if (brains > 0 | shots > 0 | feet > 0) {
+    // feet counter goes back to zero
     resetFeet()
     rollDice()
   }
 }
 
+// check win/loss conditions
+// eating 13 brains wins the game
+// getting 3 shots in a turn ends your turn and forfeits your brains for the turn
 const checkWinLose = function () {
+  if (store.playerOneBrains >= 13 || store.playerTwoBrains >= 13) {
   if (brains >= 13) {
     alert('you ate so many brains! you win!')
+    gameOver()
   } else if (shots >= 3) {
     alert('shotgunned! you lose all your brains this turn')
+    loseTurn()
   }
+}
+
+const resetCounters = function () {
+  brains = 0
+  document.getElementById('brains').value = brains
+  shots = 0
+  document.getElementById('shots').value = shots
+  feet = 0
+  document.getElementById('feet').value = feet
+}
+
+store.playerOneBrains = 0
+store.playerTwoBrains = 0
+
+// add brains collected this turn to player's total brains this game
+const storeBrains = function () {
+  console.log(playerOneTurn)
+  if (playerOneTurn === true) {
+    store.playerOneBrains += brains
+  } else if (playerOneTurn === false) {
+    store.playerTwoBrains += brains
+  } else {
+    console.log('error')
+    console.log(playerOneTurn)
+    console.log(store)
+  }
+  console.log(store)
+  checkWinLose()
+}
+
+const loseTurn = function () {
+  resetCounters()
+  fillCan()
+  playerOneTurn = !playerOneTurn
+}
+
+const endTurn = function () {
+  // save brains, add to player's total brains
+  storeBrains()
+  // reset current brain/feet/shots counters
+  resetCounters()
+  // change player
+  playerOneTurn = !playerOneTurn
+  // put all dice back in cup
+  fillCan()
+  // swap to other player's turn
+  // coming soon
+}
+
+const gameOver = function () {
+  // can't press any buttons except start game
 }
 
 module.exports = {
   startGame,
+  startTurn,
+  endTurn,
   rollDice,
   rollAgain
 }

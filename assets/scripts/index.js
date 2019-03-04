@@ -9,8 +9,8 @@ const gameplay = require('./gameplay.js')
 
 $(() => {
   // your JS code goes here
+  $('.playingGame').hide()
   $('.start').on('click', gameplay.startGame)
-  $('.roll').on('click', gameplay.startTurn)
+  $('.roll').on('click', gameplay.rollDice)
   $('.rollAgain').on('click', gameplay.rollAgain)
-  $('.endTurn').on('click', gameplay.endTurn)
 })

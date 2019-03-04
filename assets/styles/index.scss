@@ -1,2 +1,38 @@
-$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
-@import '~bootstrap-sass/assets/stylesheets/bootstrap';
+// $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
+// @import '~bootstrap-sass/assets/stylesheets/bootstrap';
+
+body {
+  background-image: url('../../public/images/background.jpg');
+  color: #34383d;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+button {
+  border: 0;
+  border-radius: 4px;
+  color: #34383d;
+  font-weight: bold;
+  padding: 4px 6px;
+  width: auto;
+}
+
+input {
+  width: 26px;
+}
+
+#die1 {
+  height: 50px;
+  width: 50px;
+}
+
+#die2 {
+  height: 50px;
+  width: 50px;
+}
+
+#die3 {
+  height: 50px;
+  width: 50px;
+}

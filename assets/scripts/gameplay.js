@@ -131,8 +131,9 @@ const startGame = function () {
 }
 
 const changeTurn = function () {
+  playerOneTurn = !playerOneTurn
   display.startTurnDisplay()
-  display.showPlayer()
+  display.showPlayer(playerOneTurn)
   playerHand.length = 0
   fillCan()
 }
@@ -182,6 +183,7 @@ const takeDice = function () {
 }
 
 let brains = 0
+let tempBrains = 0
 let feet = 0
 let shots = 0
 
@@ -197,6 +199,7 @@ const rollDice = function () {
   if (playerHand[2].roll() === 'brain') {
     display.findDieImg(playerHand[2], 2, 'brain')
     brains += 1
+    tempBrains += 1
     document.getElementById('brains').value = brains
     playerHand.pop()
   } else if (playerHand[2].roll() === 'shot') {
@@ -216,6 +219,7 @@ const rollDice = function () {
   if (playerHand[1].roll() === 'brain') {
     display.findDieImg(playerHand[1], 1, 'brain')
     brains += 1
+    tempBrains += 1
     document.getElementById('brains').value = brains
     playerHand.splice(1, 1)
   } else if (playerHand[1].roll() === 'shot') {
@@ -235,6 +239,7 @@ const rollDice = function () {
   if (playerHand[0].roll() === 'brain') {
     display.findDieImg(playerHand[0], 0, 'brain')
     brains += 1
+    tempBrains += 1
     document.getElementById('brains').value = brains
     playerHand.splice(0, 1)
   } else if (playerHand[0].roll() === 'shot') {
@@ -247,8 +252,9 @@ const rollDice = function () {
     feet += 1
     document.getElementById('feet').value = feet
   }
-  console.log(brains, shots, feet)
+  console.log(brains, tempBrains, shots, feet)
   console.log(playerHand)
+  storeBrains()
   checkWinLose()
 }
 
@@ -272,14 +278,14 @@ const rollAgain = function () {
 // getting 3 shots in a turn ends your turn and forfeits your brains for the turn
 const checkWinLose = function () {
   if (store.playerOneBrains >= 13 || store.playerTwoBrains >= 13) {
-    if (brains >= 13) {
-      alert('you ate so many brains! you win!')
-      gameOver()
-    } else if (shots >= 3) {
-      alert('shotgunned! you lose all your brains this turn')
-      loseTurn()
-    }
+    alert('you ate so many brains! you win!')
+    gameOver()
+  } else if (shots >= 3) {
+    alert('shotgunned! you lose all your brains this turn')
+    subtractBrains()
+    loseTurn()
   }
+  tempBrains = 0
 }
 
 const resetCounters = function () {
@@ -294,35 +300,44 @@ const resetCounters = function () {
 store.playerOneBrains = 0
 store.playerTwoBrains = 0
 
+const subtractBrains = function () {
+  console.log('subtractBrains, brains is', brains)
+  if (playerOneTurn === true) {
+    store.playerOneBrains -= brains
+    document.getElementById('p1Brains').value = store.playerOneBrains
+  } else if (playerOneTurn === false) {
+    store.playerTwoBrains -= brains
+    document.getElementById('p2Brains').value = store.playerTwoBrains
+  } else {
+    console.log('error')
+  }
+  console.log(store)
+}
+
 // add brains collected this turn to player's total brains this game
 const storeBrains = function () {
   console.log(playerOneTurn)
+  console.log(tempBrains)
   if (playerOneTurn === true) {
-    store.playerOneBrains += brains
+    store.playerOneBrains += tempBrains
+    document.getElementById('p1Brains').value = store.playerOneBrains
   } else if (playerOneTurn === false) {
-    store.playerTwoBrains += brains
+    store.playerTwoBrains += tempBrains
+    document.getElementById('p2Brains').value = store.playerTwoBrains
   } else {
     console.log('error')
-    console.log(playerOneTurn)
-    console.log(store)
   }
   console.log(store)
-  checkWinLose()
 }
 
 const loseTurn = function () {
   resetCounters()
-  fillCan()
-  playerOneTurn = !playerOneTurn
+  changeTurn()
 }
 
 const endTurn = function () {
-  // save brains, add to player's total brains
-  storeBrains()
   // reset current brain/feet/shots counters
   resetCounters()
-  // change player
-  playerOneTurn = !playerOneTurn
   // swap to other player's turn
   changeTurn()
 }

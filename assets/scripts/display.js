@@ -12,7 +12,7 @@ const showPlayer = function (playerOneTurn) {
   if (playerOneTurn === true) {
     $('.player1').css('font-size', '28px')
     $('.player2').css('font-size', '20px')
-  } else {
+  } else if (playerOneTurn !== true) {
     $('.player1').css('font-size', '20px')
     $('.player2').css('font-size', '28px')
   }

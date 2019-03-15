@@ -6,26 +6,27 @@ const startGameDisplay = function () {
   $('.firstRoll').show()
   $('.afterFirstRoll').hide()
   $('.players').show()
+  document.getElementById('otherText').innerHTML = ', there are 13 dice in the can. Pick 3 at random and roll them.'
 }
 
 const showPlayer = function (playerOneTurn) {
   if (playerOneTurn === true) {
-    $('.player1').css('font-size', '28px')
-    $('.player2').css('font-size', '20px')
+    document.getElementById('player#').innerHTML = 'Player One'
   } else if (playerOneTurn !== true) {
-    $('.player1').css('font-size', '20px')
-    $('.player2').css('font-size', '28px')
+    document.getElementById('player#').innerHTML = 'Player Two'
   }
 }
 
 const startTurnDisplay = function () {
   $('.firstRoll').show()
   $('.afterFirstRoll').hide()
+  document.getElementById('otherText').innerHTML = ', there are 13 dice in the can. Pick 3 at random and roll them.'
 }
 
 const afterInitialRoll = function () {
   $('.firstRoll').hide()
   $('.afterFirstRoll').show()
+  document.getElementById('otherText').innerHTML = ' rolled'
 }
 
 const findDieImg = function (playerDie, imgNum, roll) {
@@ -43,6 +44,32 @@ const findDieImg = function (playerDie, imgNum, roll) {
   }
 }
 
+const shotgunned = function () {
+  document.getElementById('otherText').innerHTML = ', you were shot 3 times! You lose all your brains this turn.'
+  $('#shotgunned').show()
+  $('#brainsID').hide()
+  $('#shotsID').hide()
+  $('#feetID').hide()
+  $('#nextMove').hide()
+}
+
+const lostTurn = function () {
+  $('#shotgunned').hide()
+  $('#brainsID').show()
+  $('#shotsID').show()
+  $('#feetID').show()
+  $('#nextMove').show()
+}
+
+const winner = function () {
+  document.getElementById('otherText').innerHTML = ', you ate so many brains! What a good zombie!'
+  $('#brained').show()
+  $('#brainsID').hide()
+  $('#shotsID').hide()
+  $('#feetID').hide()
+  $('#nextMove').hide()
+}
+
 const endedGameDisplay = function () {
   $('.notPlaying').hide()
   $('.firstRoll').show()
@@ -55,5 +82,8 @@ module.exports = {
   startTurnDisplay,
   afterInitialRoll,
   findDieImg,
+  shotgunned,
+  lostTurn,
+  winner,
   endedGameDisplay
 }

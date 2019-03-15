@@ -119,22 +119,27 @@ const dieThirteen = {
   }
 }
 
-// on gamestart, make sure playerHand is empty
-// make it playerOne's turn
 const startGame = function () {
   display.startGameDisplay()
+  // on gamestart, make sure playerHand is empty
   playerHand.length = 0
+  // make it playerOne's turn
   playerOneTurn = !playerOneTurn
   display.showPlayer(playerOneTurn)
   console.log(playerOneTurn)
+  // put the dice in the can
   fillCan()
 }
 
 const changeTurn = function () {
+  // swap the players' turns
   playerOneTurn = !playerOneTurn
   display.startTurnDisplay()
+  // show whose turn it is
   display.showPlayer(playerOneTurn)
+  // make sure player hand is empty
   playerHand.length = 0
+  // put the dice in the can
   fillCan()
 }
 
@@ -166,6 +171,8 @@ let dieNumber
 const startTurn = function () {
   if (brains === 0 && shots === 0 && feet === 0) {
     rollDice()
+  } else {
+    console.log('error')
   }
 }
 
@@ -200,17 +207,17 @@ const rollDice = function () {
     display.findDieImg(playerHand[2], 2, 'brain')
     brains += 1
     tempBrains += 1
-    document.getElementById('brains').value = brains
+    document.getElementById('brains').innerHTML = brains
     playerHand.pop()
   } else if (playerHand[2].roll() === 'shot') {
     display.findDieImg(playerHand[2], 2, 'shot')
     shots += 1
-    document.getElementById('shots').value = shots
+    document.getElementById('shots').innerHTML = shots
     playerHand.pop()
   } else {
     display.findDieImg(playerHand[2], 2, 'feet')
     feet += 1
-    document.getElementById('feet').value = feet
+    document.getElementById('feet').innerHTML = feet
   }
   console.log(brains, shots, feet)
   console.log(playerHand)
@@ -220,17 +227,17 @@ const rollDice = function () {
     display.findDieImg(playerHand[1], 1, 'brain')
     brains += 1
     tempBrains += 1
-    document.getElementById('brains').value = brains
+    document.getElementById('brains').innerHTML = brains
     playerHand.splice(1, 1)
   } else if (playerHand[1].roll() === 'shot') {
     display.findDieImg(playerHand[1], 1, 'shot')
     shots += 1
-    document.getElementById('shots').value = shots
+    document.getElementById('shots').innerHTML = shots
     playerHand.splice(1, 1)
   } else {
     display.findDieImg(playerHand[1], 1, 'feet')
     feet += 1
-    document.getElementById('feet').value = feet
+    document.getElementById('feet').innerHTML = feet
   }
   console.log(brains, shots, feet)
   console.log(playerHand)
@@ -240,17 +247,17 @@ const rollDice = function () {
     display.findDieImg(playerHand[0], 0, 'brain')
     brains += 1
     tempBrains += 1
-    document.getElementById('brains').value = brains
+    document.getElementById('brains').innerHTML = brains
     playerHand.splice(0, 1)
   } else if (playerHand[0].roll() === 'shot') {
     display.findDieImg(playerHand[0], 0, 'shot')
     shots += 1
-    document.getElementById('shots').value = shots
+    document.getElementById('shots').innerHTML = shots
     playerHand.splice(0, 1)
   } else {
     display.findDieImg(playerHand[0], 0, 'feet')
     feet += 1
-    document.getElementById('feet').value = feet
+    document.getElementById('feet').innerHTML = feet
   }
   console.log(brains, tempBrains, shots, feet)
   console.log(playerHand)
@@ -261,7 +268,7 @@ const rollDice = function () {
 // feet counter goes back to zero
 const resetFeet = function () {
   feet = 0
-  document.getElementById('feet').value = feet
+  document.getElementById('feet').innerHTML = feet
 }
 
 // can only roll again if you've already rolled
@@ -278,23 +285,22 @@ const rollAgain = function () {
 // getting 3 shots in a turn ends your turn and forfeits your brains for the turn
 const checkWinLose = function () {
   if (store.playerOneBrains >= 13 || store.playerTwoBrains >= 13) {
-    alert('you ate so many brains! you win!')
-    gameOver()
+    display.winner()
+    // gameOver()
   } else if (shots >= 3) {
-    alert('shotgunned! you lose all your brains this turn')
+    display.shotgunned()
     subtractBrains()
-    loseTurn()
   }
   tempBrains = 0
 }
 
 const resetCounters = function () {
   brains = 0
-  document.getElementById('brains').value = brains
+  document.getElementById('brains').innerHTML = brains
   shots = 0
-  document.getElementById('shots').value = shots
+  document.getElementById('shots').innerHTML = shots
   feet = 0
-  document.getElementById('feet').value = feet
+  document.getElementById('feet').innerHTML = feet
 }
 
 store.playerOneBrains = 0
@@ -304,10 +310,10 @@ const subtractBrains = function () {
   console.log('subtractBrains, brains is', brains)
   if (playerOneTurn === true) {
     store.playerOneBrains -= brains
-    document.getElementById('p1Brains').value = store.playerOneBrains
+    document.getElementById('p1Brains').innerHTML = store.playerOneBrains
   } else if (playerOneTurn === false) {
     store.playerTwoBrains -= brains
-    document.getElementById('p2Brains').value = store.playerTwoBrains
+    document.getElementById('p2Brains').innerHTML = store.playerTwoBrains
   } else {
     console.log('error')
   }
@@ -320,10 +326,10 @@ const storeBrains = function () {
   console.log(tempBrains)
   if (playerOneTurn === true) {
     store.playerOneBrains += tempBrains
-    document.getElementById('p1Brains').value = store.playerOneBrains
+    document.getElementById('p1Brains').innerHTML = store.playerOneBrains
   } else if (playerOneTurn === false) {
     store.playerTwoBrains += tempBrains
-    document.getElementById('p2Brains').value = store.playerTwoBrains
+    document.getElementById('p2Brains').innerHTML = store.playerTwoBrains
   } else {
     console.log('error')
   }
@@ -332,6 +338,7 @@ const storeBrains = function () {
 
 const loseTurn = function () {
   resetCounters()
+  display.lostTurn()
   changeTurn()
 }
 
@@ -345,6 +352,10 @@ const endTurn = function () {
 // change display
 // anything else need to be done here?
 const gameOver = function () {
+  store.playerOneBrains = 0
+  document.getElementById('p1Brains').innerHTML = store.playerOneBrains
+  store.playerTwoBrains = 0
+  document.getElementById('p2Brains').innerHTML = store.playerTwoBrains
   display.endedGameDisplay()
 }
 
@@ -353,5 +364,7 @@ module.exports = {
   startTurn,
   endTurn,
   rollDice,
-  rollAgain
+  rollAgain,
+  loseTurn,
+  gameOver
 }

@@ -18,8 +18,9 @@ button {
   width: auto;
 }
 
-input {
-  width: 26px;
+#brainsID {
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 #die1 {
@@ -35,4 +36,14 @@ input {
 #die3 {
   height: 50px;
   width: 50px;
+}
+
+#feetID {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+#shotsID {
+  margin-bottom: 5px;
+  margin-top: 5px;
 }

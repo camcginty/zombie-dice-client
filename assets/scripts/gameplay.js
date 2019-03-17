@@ -11,6 +11,8 @@ const can = []
 // playerHand is empty until takeDice
 const playerHand = []
 
+const shotDice = []
+
 // 13 dice
 // 6 green dice with 3 brains, 1 shot, 2 feet
 // 4 yellow dice with 2 brains, 2 shots, 2 feet
@@ -176,17 +178,42 @@ const startTurn = function () {
   }
 }
 
-// take 3 random dice out of the can and put them into the player's hand
 const takeDice = function () {
+  // if there are no more dice in the can, refill it
+  if (can.length === 0) {
+    refillCan()
+  } else {
   // pick a random die
-  dieNumber = [Math.floor(Math.random() * can.length)]
-  console.log(dieNumber)
-  // add the die to playerHand
-  playerHand.push(can[dieNumber])
-  // remove the die from can
-  can.splice(dieNumber, 1)
+    dieNumber = [Math.floor(Math.random() * can.length)]
+    console.log(dieNumber)
+    // add the die to playerHand
+    playerHand.push(can[dieNumber])
+    // remove the die from can
+    can.splice(dieNumber, 1)
+    console.log(can)
+    console.log(playerHand)
+  }
+}
+
+const refillCan = function () {
+  // put dice back in the can
+  fillCan()
+  // subtract any dice that rolled shots. they stay on the board
+  if (shotDice.length !== 0) {
+    removeDice()
+  }
+}
+
+const removeDice = function () {
+  const colorDie = shotDice.length - 1
+  if (shotDice[colorDie].color === 'red') {
+    can.pop()
+  } else if (shotDice[colorDie].color === 'yellow') {
+    can.splice(7, 1)
+  } else if (shotDice[colorDie].color === 'green') {
+    can.splice(0, 1)
+  }
   console.log(can)
-  console.log(playerHand)
 }
 
 let brains = 0
@@ -213,6 +240,7 @@ const rollDice = function () {
     display.findDieImg(playerHand[2], 2, 'shot')
     shots += 1
     document.getElementById('shots').innerHTML = shots
+    shotDice.push(playerHand[2])
     playerHand.pop()
   } else {
     display.findDieImg(playerHand[2], 2, 'feet')
@@ -233,6 +261,7 @@ const rollDice = function () {
     display.findDieImg(playerHand[1], 1, 'shot')
     shots += 1
     document.getElementById('shots').innerHTML = shots
+    shotDice.push(playerHand[1])
     playerHand.splice(1, 1)
   } else {
     display.findDieImg(playerHand[1], 1, 'feet')
@@ -253,6 +282,7 @@ const rollDice = function () {
     display.findDieImg(playerHand[0], 0, 'shot')
     shots += 1
     document.getElementById('shots').innerHTML = shots
+    shotDice.push(playerHand[0])
     playerHand.splice(0, 1)
   } else {
     display.findDieImg(playerHand[0], 0, 'feet')

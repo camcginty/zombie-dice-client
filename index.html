@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>Zombie Dice</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      <!-- Do not add `link` tags-->
+      <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+      <!-- Do not add `script` tags-->
+      <script src="public/vendor.js" type="text/javascript" charset="utf-8" defer></script>
+      <script src="public/application.js" type="text/javascript" charset="utf-8" defer></script>
+    </head>
+    <body>
+      <h1>Zombie Dice</h1>
+      <h2>Eat Brains. Don't get shot.</h2>
+      <h3 class="notPlaying">A game for 2 players (currently).</h3>
+      <button class="start notPlaying">Start Game</button>
+      <div class="playingGame players">
+        <form class="player1">Player One has <span id="p1Brains">0</span> brains.</form>
+        <form class="player2">Player Two has <span id="p2Brains">0</span> brains.</form>
+      </div>
+      <p id="info"><span id="player#"></span><span id="otherText"></span></p>
+      <div class="playingGame firstRoll">
+        <button class="roll">Roll 3 Dice</button>
+      </div>
+
+      <div class=" playingGame afterFirstRoll">
+        <div class="diceRoll">
+          <img alt="" id="die1" src="">
+          <img alt="" id="die2" src="">
+          <img alt="" id="die3" src=""></div>
+        <button id="shotgunned">OK</button>
+        <button id="brained">OK</button>
+        <p id="brainsID"><span id="brains">0</span> Brains. You need 13 Brains total to win.</p>
+        <p id="shotsID"><span id="shots">0</span> Shots. If you are shot 3 times this turn, you lose any brains you acquired this turn.</p>
+        <p id="feetID"><span id="feet">0</span> Feet. These people got away from you. If you roll again, you will reroll these dice.</p>
+        <p id="nextMove">Would you like to roll again and keep accumulating brains (and shots)?<br>
+        <button class="rollAgain">Roll again</button><br>
+        Or would you like to bank your brains and let the next player go?<br>
+        <button class="endTurn">Keep brains, pass turn</button></p>
+    </div>
+    </body>
+    <footer>Zombie Dice belongs to <a href="http://www.sjgames.com/dice/zombiedice/">Steve Jackson Games</a>. Full rules available <a href="http://www.sjgames.com/dice/zombiedice/img/ZDRules_English.pdf">here</a>. I made this version for fun but you can get the official apps for free <a href="http://www.sjgames.com/apps/zombiedice/">here</a>.<br>
+      To see more of my coding work, visit my <a href="https://github.com/camcginty">GitHub</a> or <a href="https://camcginty.github.io/">portfolio</a>.
+    </footer>
+</html>

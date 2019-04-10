@@ -33,7 +33,7 @@ const findDieImg = function (playerDie, imgNum, roll) {
   console.log(playerDie)
   num = imgNum + 1
   if (num === 1) {
-    document.getElementById('die3').setAttribute('src', '../../public/images/' + playerDie.color + roll + '.jpeg')
+    document.getElementById('die3').setAttribute('src', '../public/images/' + playerDie.color + roll + '.jpeg')
     document.getElementById('die3').setAttribute('alt', 'die showing ' + playerDie.color + roll)
   } else if (num === 2) {
     document.getElementById('die2').setAttribute('src', '../../public/images/' + playerDie.color + roll + '.jpeg')
